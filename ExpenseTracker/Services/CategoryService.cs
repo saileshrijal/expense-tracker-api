@@ -24,30 +24,26 @@ namespace ExpenseTracker.Services
             var category = new Category(){
                 Name = categoryDto.Name,
                 CreatedDate = DateTime.Now,
-                ApplicationUserId = await _currentUserProvider.GetUserIdAsync()
+                ApplicationUserId = await _currentUserProvider.GetUserIdAsync(),
+                TransactionType = categoryDto.TransactionType
             };
             await _unitOfWork.CreateAsync(category);
+            await _unitOfWork.SaveAsync();
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
             var category = _categoryRepository.GetByIdAsync(id);
-            if(category == null)
-            {
-                throw new Exception("Category not found");
-            }
-            return _unitOfWork.DeleteAsync(category);
+            await _unitOfWork.DeleteAsync(category);
+            await _unitOfWork.SaveAsync();
         }
 
         public async Task UpdateAsync(int id, CategoryDto categoryDto)
         {
             var category = await _categoryRepository.GetByIdAsync(id);
-            if(category == null)
-            {
-                throw new Exception("Category not found");
-            }
             category.Name = categoryDto.Name;
-            await _unitOfWork.UpdateAsync(category);
+            category.TransactionType = categoryDto.TransactionType;
+            await _unitOfWork.SaveAsync();
         }
     }
 }

@@ -7,21 +7,26 @@ using ExpenseTracker.Provider.Interface;
 using ExpenseTracker.Repository.Interface;
 using ExpenseTracker.Services.Interface;
 using ExpenseTracker.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
+    [Authorize]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
         private readonly ICategoryRepository _categoryRepository;
-        public CategoryController(ICategoryService categoryService,     
-                            ICategoryRepository categoryRepository)
+        private readonly ICurrentUserProvider _currentUserProvider;
+        public CategoryController(ICategoryService categoryService,
+                            ICategoryRepository categoryRepository,
+                            ICurrentUserProvider currentUserProvider)
         {
             _categoryService = categoryService;
             _categoryRepository = categoryRepository;
+            _currentUserProvider = currentUserProvider;
         }
 
         [HttpGet]
@@ -29,11 +34,20 @@ namespace ExpenseTracker.Controllers
         {
             try
             {
-                var categories = await _categoryRepository.GetAllAsync();
+                var categories = await _categoryRepository.GetCategoriesByUserIdAsync(await _currentUserProvider.GetUserIdAsync());
                 var results = categories.Select(c => new {
                     c.Id,
-                    c.Name
+                    c.Name,
+                    // getting transactionType text from enum value
+                    TransactionType = new{
+                        id = c.TransactionType,
+                        name = c.TransactionType.ToString()
+                    },
+                    c.ApplicationUserId
                 });
+                // get text from enum value
+                // var transactionType = categories.Select(c => c.TransactionType.ToString());
+
                 return Ok(results);
             }
             catch (Exception ex)
@@ -48,7 +62,8 @@ namespace ExpenseTracker.Controllers
             try
             {
                 var categoryDto = new CategoryDto(){
-                    Name = vm.Name
+                    Name = vm.Name,
+                    TransactionType = vm.TransactionType
                 };
                 await _categoryService.CreateAsync(categoryDto);
                 return Ok();
@@ -65,7 +80,8 @@ namespace ExpenseTracker.Controllers
             try
             {
                 var categoryDto = new CategoryDto(){
-                    Name = vm.Name
+                    Name = vm.Name,
+                    TransactionType = vm.TransactionType
                 };
                 await _categoryService.UpdateAsync(id, categoryDto);
                 return Ok();

@@ -8,6 +8,8 @@ using ExpenseTracker.Manager.Interface;
 using ExpenseTracker.Models;
 using ExpenseTracker.Provider;
 using ExpenseTracker.Provider.Interface;
+using ExpenseTracker.Repository;
+using ExpenseTracker.Repository.Interface;
 using ExpenseTracker.Services;
 using ExpenseTracker.Services.Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -48,10 +50,11 @@ builder.Services.AddAuthentication(options =>
         ValidateLifetime = true,
     };
 });
+//unit of work
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 //provider
 builder.Services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
-
 
 //helpers
 builder.Services.AddScoped<IJwtService, JwtService>();
@@ -61,6 +64,10 @@ builder.Services.AddScoped<IAuthManager, AuthManager>();
 
 //services
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+//repository
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 
 var app = builder.Build();

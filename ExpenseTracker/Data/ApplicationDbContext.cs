@@ -1,7 +1,6 @@
 using ExpenseTracker.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
 namespace ExpenseTracker.Data
 {
     public class ApplicationDbContext : IdentityDbContext
@@ -10,7 +9,8 @@ namespace ExpenseTracker.Data
             : base(options)
         { }
 
-        private DbSet<ApplicationUser>? ApplicationUsers { get; set; }
-        private DbSet<Category>? Categories { get; set; }
+        public DbSet<ApplicationUser>? ApplicationUsers { get; set; }
+        public DbSet<Category>? Categories { get; set; }
+        public DbSet<Transaction>? Transactions { get; set; }
     }
 }

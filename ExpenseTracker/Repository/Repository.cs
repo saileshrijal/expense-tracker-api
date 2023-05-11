@@ -7,7 +7,7 @@ namespace ExpenseTracker.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        protected readonly ApplicationDbContext _context;
+        protected ApplicationDbContext _context;
         private readonly DbSet<T> _dbSet;
 
         public Repository(ApplicationDbContext context)

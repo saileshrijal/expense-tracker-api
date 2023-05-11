@@ -8,6 +8,6 @@ namespace ExpenseTracker.Repository.Interface
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        
+        Task<List<Category>> GetCategoriesByUserIdAsync(string userId);
     }
 }
