@@ -13,7 +13,9 @@ namespace ExpenseTracker.Repository
 
         public async Task<List<Category>> GetCategoriesByUserIdAsync(string userId)
         {
-            return await _context.Categories!.Where(c => c.ApplicationUserId == userId).ToListAsync();
+            return await _context.Categories!.Where(c => c.ApplicationUserId == userId)
+                    .OrderByDescending(x=>x.CreatedDate)
+                    .ToListAsync();
         }
     }
 }

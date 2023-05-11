@@ -48,6 +48,17 @@ namespace ExpenseTracker.Manager
                 };
             }
 
+            if (!user.EmailConfirmed)
+            {
+                return new AuthResult
+                {
+                    Errors = new List<string>
+                    {
+                        "Email is not confirmed"
+                    }
+                };
+            }
+
             return new AuthResult
             {
                 Success = true,

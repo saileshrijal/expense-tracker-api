@@ -8,5 +8,7 @@ namespace ExpenseTracker.Models
         public double Amount { get; set; }
         public string? Note { get; set; }
         public DateTime CreatedDate { get; set; }
+        public string? ApplicationUserId { get; set; }
+        public ApplicationUser? ApplicationUser { get; set; }
     }
 }
