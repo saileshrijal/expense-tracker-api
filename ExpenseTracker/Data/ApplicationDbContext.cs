@@ -11,5 +11,6 @@ namespace ExpenseTracker.Data
         { }
 
         private DbSet<ApplicationUser>? ApplicationUsers { get; set; }
+        private DbSet<Category>? Categories { get; set; }
     }
 }

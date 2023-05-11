@@ -6,6 +6,8 @@ using ExpenseTracker.Helpers.Inteface;
 using ExpenseTracker.Manager;
 using ExpenseTracker.Manager.Interface;
 using ExpenseTracker.Models;
+using ExpenseTracker.Provider;
+using ExpenseTracker.Provider.Interface;
 using ExpenseTracker.Services;
 using ExpenseTracker.Services.Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -25,6 +27,7 @@ builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfi
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -46,6 +49,10 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+//provider
+builder.Services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
+
+
 //helpers
 builder.Services.AddScoped<IJwtService, JwtService>();
 
@@ -64,7 +71,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

@@ -31,7 +31,7 @@ namespace ExpenseTracker.Controllers
                     message = "Invalid payload"
                 });
             }
-            var authResult = await _authManager.Login(vm.UserName, vm.Password);
+            var authResult = await _authManager.Login(vm.UserName!, vm.Password!);
             return Ok(authResult);
             
         }
